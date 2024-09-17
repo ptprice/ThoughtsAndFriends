@@ -1,9 +1,9 @@
-const { Post, Thought } = require("../models");
+const { User, Thought } = require("../models");
 
 module.exports = {
   async getThoughts(req, res) {
     try {
-      const thoughts = await Thought.find().populate({ path: "User" });
+      const thoughts = await Thought.find();
 
       res.json(thoughts);
     } catch (err) {
@@ -15,7 +15,7 @@ module.exports = {
     try {
       const oneThought = await Thought.findOne({
         _id: req.params.postId,
-      }).populate({ path: "tags", select: "-__v" });
+      });
 
       if (!oneThought) {
         return res.status(404).json({ message: "No thought with that ID" });
@@ -37,6 +37,7 @@ module.exports = {
       );
       res.json(thought);
     } catch (err) {
+      console.error({ message: err });
       res.status(500).json(err);
     }
   },
@@ -89,6 +90,7 @@ module.exports = {
 
       res.json(updatedThought);
     } catch (err) {
+      console.error({ message: err });
       res.status(500).json(err);
     }
   },
