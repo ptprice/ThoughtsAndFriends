@@ -69,7 +69,11 @@ module.exports = {
       if (!deletedThought) {
         return res.status(404).json({ message: "No thought with this ID" });
       }
-
+      const updatedUser = await User.findOneAndUpdate(
+        { thoughts: req.params.postId },
+        { $pull: { thoughts: req.params.postId } },
+        { new: true }
+      );
       res.json(deletedThought);
     } catch (err) {
       res.status(500).json(err);
